@@ -1,0 +1,94 @@
+<div class="grid p-fluid">
+  <div class="col-12 text-center my-3">
+    <h1>Health Dashboard</h1>
+  </div>
+
+  @if (!latestRecord) {
+  <div class="col-12">
+    <div class="card text-center p-5">
+      <h2>No Health Records Found</h2>
+      <p>Start tracking your health today!</p>
+      <button pButton label="Add Health Data" routerLink="/add-health" class="p-button-primary"
+        aria-label="Add Health Data"></button>
+    </div>
+  </div>
+  }
+
+  @if (latestRecord) {
+  <div class="col-12 mb-3">
+    <div class="card bg-blue-50">
+      <h2 class="m-0 text-blue-800">Welcome, {{ latestRecord.name }}!</h2>
+      <p class="mt-2 mb-0 text-600">Here is your latest health summary.</p>
+    </div>
+  </div>
+  <div class="col-12 md:col-6 lg:col-3">
+    <div class="card mb-0">
+      <div class="flex justify-content-between mb-3">
+        <div>
+          <span class="block text-500 font-medium mb-3">BMI</span>
+          <div class="text-900 font-medium text-xl">{{ latestRecord.bmi }}</div>
+        </div>
+        <div class="flex align-items-center justify-content-center bg-blue-100 border-round"
+          style="width: 2.5rem; height: 2.5rem">
+          <i class="pi pi-chart-bar text-blue-500 text-xl"></i>
+        </div>
+      </div>
+      <span
+        [class]="'text-sm font-medium ' + (latestRecord.bmiCategory === 'Normal' ? 'text-green-500' : 'text-orange-500')">
+        {{ latestRecord.bmiCategory }}
+      </span>
+    </div>
+  </div>
+  <div class="col-12 md:col-6 lg:col-3">
+    <div class="card mb-0">
+      <div class="flex justify-content-between mb-3">
+        <div>
+          <span class="block text-500 font-medium mb-3">Weight</span>
+          <div class="text-900 font-medium text-xl">{{ latestRecord.weight }} kg</div>
+        </div>
+        <div class="flex align-items-center justify-content-center bg-orange-100 border-round"
+          style="width: 2.5rem; height: 2.5rem">
+          <i class="pi pi-user text-orange-500 text-xl"></i>
+        </div>
+      </div>
+      <span class="text-500">Last recorded</span>
+    </div>
+  </div>
+  <div class="col-12 md:col-6 lg:col-3">
+    <div class="card mb-0">
+      <div class="flex justify-content-between mb-3">
+        <div>
+          <span class="block text-500 font-medium mb-3">Blood Pressure</span>
+          <div class="text-900 font-medium text-xl">{{ latestRecord.bp }}</div>
+        </div>
+        <div class="flex align-items-center justify-content-center bg-cyan-100 border-round"
+          style="width: 2.5rem; height: 2.5rem">
+          <i class="pi pi-heart text-cyan-500 text-xl"></i>
+        </div>
+      </div>
+      <span class="text-500">mmHg</span>
+    </div>
+  </div>
+  <div class="col-12 md:col-6 lg:col-3">
+    <div class="card mb-0">
+      <div class="flex justify-content-between mb-3">
+        <div>
+          <span class="block text-500 font-medium mb-3">Sugar Level</span>
+          <div class="text-900 font-medium text-xl">{{ latestRecord.sugar }}</div>
+        </div>
+        <div class="flex align-items-center justify-content-center bg-purple-100 border-round"
+          style="width: 2.5rem; height: 2.5rem">
+          <i class="pi pi-filter text-purple-500 text-xl"></i>
+        </div>
+      </div>
+      <span class="text-500">mg/dL</span>
+    </div>
+  </div>
+  <div class="col-12 mt-4 text-center">
+    <button pButton label="View History" routerLink="/history" class="p-button-secondary mr-2"
+      aria-label="View History"></button>
+    <button pButton label="Add New Entry" routerLink="/add-health" class="p-button-primary"
+      aria-label="Add New Health Entry"></button>
+  </div>
+  }
+</div>

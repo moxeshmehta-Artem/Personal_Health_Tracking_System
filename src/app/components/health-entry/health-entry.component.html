@@ -1,0 +1,52 @@
+<div class="flex justify-content-center">
+    <div class="card w-full md:w-8 lg:w-6">
+        <h2 class="text-center">Add Health Details</h2>
+        <form [formGroup]="healthForm" (ngSubmit)="onSubmit()" class="p-fluid">
+            <div class="field">
+                <label for="name">Patient Name</label>
+                <input pInputText id="name" formControlName="name" placeholder="Enter patient name" />
+            </div>
+
+            <div class="field">
+                <label for="date">Date</label>
+                <p-calendar id="date" formControlName="date" dateFormat="yy-mm-dd" [showIcon]="true"></p-calendar>
+            </div>
+
+            <div class="formgrid grid">
+                <div class="field col-12 md:col-6">
+                    <label for="weight">Weight (kg)</label>
+                    <p-inputNumber id="weight" formControlName="weight" [minFractionDigits]="1"
+                        suffix=" kg"></p-inputNumber>
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label for="height">Height (m)</label>
+                    <p-inputNumber id="height" formControlName="height" [minFractionDigits]="2"
+                        placeholder="e.g. 1.75"></p-inputNumber>
+                </div>
+            </div>
+
+            <div class="field">
+                <label for="bp">Blood Pressure (Systolic/Diastolic)</label>
+                <input pInputText id="bp" formControlName="bp" placeholder="e.g. 120/80" />
+            </div>
+
+            <div class="formgrid grid">
+                <div class="field col-12 md:col-6">
+                    <label for="sugar">Sugar Level (mg/dL)</label>
+                    <p-inputNumber id="sugar" formControlName="sugar"></p-inputNumber>
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label for="heartRate">Heart Rate (bpm)</label>
+                    <p-inputNumber id="heartRate" formControlName="heartRate"></p-inputNumber>
+                </div>
+            </div>
+
+            <div class="flex justify-content-end mt-4">
+                <button pButton type="button" label="Cancel" class="p-button-secondary mr-2" routerLink="/"
+                    aria-label="Cancel"></button>
+                <button pButton type="submit" label="Save Record" [disabled]="healthForm.invalid"
+                    aria-label="Save Record"></button>
+            </div>
+        </form>
+    </div>
+</div>
