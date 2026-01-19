@@ -1,0 +1,120 @@
+<div class="m-4">
+
+    <p-card header="Patient Registration">
+        <div class="flex justify-content-center">
+            <form [formGroup]="patientform" class="fluid" (ngSubmit)="onSubmit()">
+
+                <!-- First Name -->
+
+                <div class="field col-12 md:col-6">
+                    <label for="firstname">First Name</label>
+                    <input pInputText id="firstname" formControlName="firstname" />
+
+                    <span class="p-error block min-h-2rem" *ngIf="patientform.get('firstname')?.invalid &&
+                 (patientform.get('firstname')?.touched || patientform.get('firstname')?.dirty)">
+                        First name is required
+                    </span>
+                </div>
+
+                <!-- Last Name -->
+                <div class="field col-12 md:col-6">
+                    <label for="lastname">Last Name</label>
+                    <input pInputText id="lastname" formControlName="lastname" />
+
+                    <span class="p-error block min-h-2rem" *ngIf="patientform.get('lastname')?.invalid &&
+                 (patientform.get('lastname')?.touched || patientform.get('lastname')?.dirty)">
+                        Last name is required
+                    </span>
+                </div>
+                <!-- Age -->
+                <div class="field col-12 md:col-6">
+                    <label for="age">Age</label>
+                    <input pInputText id="age" type="number" formControlName="age" />
+
+                    <span class="p-error block min-h-2rem" *ngIf="patientform.get('age')?.invalid &&
+                 (patientform.get('age')?.touched || patientform.get('age')?.dirty)">
+                        Age must be between 1 and 120
+                    </span>
+                </div>
+
+                <!-- Gender -->
+                <div class="field col-12 md:col-6">
+                    <label for="gender">Gender</label>
+                    <p-dropdown [options]="genders" optionLabel="label" optionValue="value" formControlName="gender"
+                        placeholder="Select Gender">
+                    </p-dropdown>
+
+                    <span class="p-error block min-h-2rem" *ngIf="patientform.get('gender')?.invalid &&
+                 (patientform.get('gender')?.touched || patientform.get('gender')?.dirty)">
+                        Gender is required
+                    </span>
+                </div>
+
+                <!-- Phone Numbers -->
+                <div formArrayName="phone">
+                    <div class="field col-12 md:col-6">
+                        <label>Phone Numbers</label>
+                        <button pButton type="button" icon="pi pi-plus" class="p-button-text" (click)="addPhone()">
+                            Add
+                        </button>
+                    </div>
+
+                    <div *ngFor="let phone of phones.controls; let i = index"
+                        class="field col-12 md:col-6 align-items-center gap-2">
+
+                        <p-inputMask mask="(999) 999-9999" placeholder="(999) 999-9999" [formControlName]="i"
+                            [unmask]="true"></p-inputMask>
+
+                        <button pButton type="button" icon="pi pi-trash" class="p-button-danger p-button-text"
+                            [disabled]="phones.length === 1" (click)="removePhone(i)">
+                            Remove
+                        </button>
+
+                        <span class="p-error block min-h-2rem" *ngIf="phone.invalid && (phone.touched || phone.dirty)">
+                            Phone number is required
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Email -->
+                <div class="field col-12 md:col-6">
+                    <label for="email">Email</label>
+                    <input pInputText id="email" formControlName="email" />
+
+                    <span class="p-error block min-h-2rem" *ngIf="patientform.get('email')?.invalid &&
+                 (patientform.get('email')?.touched || patientform.get('email')?.dirty)">
+                        Enter a valid email address
+                    </span>
+                </div>
+
+                <!-- Password -->
+                <div class="field col-12 md:col-6">
+                    <label for="password">Password</label>
+                    <input pInputText id="password" type="password" formControlName="password" />
+
+                    <span class="p-error block min-h-2rem" *ngIf="patientform.get('password')?.invalid &&
+                 (patientform.get('password')?.touched || patientform.get('password')?.dirty)">
+                        Password must be at least 6 characters
+                    </span>
+                </div>
+
+                <!-- Confirm Password -->
+                <div class="field col-12 md:col-6">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input pInputText id="confirmPassword" type="password" formControlName="confirmPassword" />
+
+                    <span class="p-error block min-h-2rem" *ngIf="patientform.hasError('passwordMismatch') &&
+                 (patientform.get('confirmPassword')?.touched ||
+                  patientform.get('confirmPassword')?.dirty)">
+                        Passwords do not match
+                    </span>
+                </div>
+
+                <!-- Submit -->
+                <button pButton type="submit" class="mt-2" [disabled]="patientform.invalid">
+                    Submit
+                </button>
+
+            </form>
+        </div>
+    </p-card>

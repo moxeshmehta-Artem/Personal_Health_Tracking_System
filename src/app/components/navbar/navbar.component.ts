@@ -33,6 +33,11 @@ export class NavbarComponent implements OnInit {
         label: 'Tips',
         icon: 'pi pi-info-circle',
         routerLink: '/tips'
+      },
+      {
+        label: 'Patient Registration',
+        icon: 'pi pi-user',
+        routerLink: '/patient-reg'
       }
     ];
   }
