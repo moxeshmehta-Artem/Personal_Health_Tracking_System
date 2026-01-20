@@ -1,6 +1,8 @@
 import { CommonModule, NgClass } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormGroup, ReactiveFormsModule, FormBuilder, Validators, FormArray } from '@angular/forms';
+import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
@@ -22,7 +24,7 @@ export class PatientRegComponent {
     { label: 'Other', value: 'other' }
   ];
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private router: Router, private authService: AuthService) {
     this.patientform = this.fb.group({
       firstname: ['', [Validators.required,
       Validators.minLength(2),
@@ -46,8 +48,9 @@ export class PatientRegComponent {
       ]],
       confirmPassword: ['', Validators.required],
     },
-      { validators: this.passwordMatchValidator });
+      { validators: (form: any) => this.passwordMatchValidator(form) });
   }
+
   passwordMatchValidator(form: any) {
     const password = form.get('password')?.value;
     const confirm = form.get('confirmPassword')?.value;
@@ -67,6 +70,12 @@ export class PatientRegComponent {
   }
 
   onSubmit() {
-    console.log(this.patientform.value);
+    if (this.patientform.valid) {
+      console.log(this.patientform.value);
+      this.authService.register(this.patientform.value);
+      this.router.navigate(['/login']);
+    } else {
+      this.patientform.markAllAsTouched();
+    }
   }
 }

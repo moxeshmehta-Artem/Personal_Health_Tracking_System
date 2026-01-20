@@ -3,5 +3,11 @@
         <ng-template pTemplate="start">
             <span class="font-bold text-xl ml-2">Health Tracker</span>
         </ng-template>
+        <ng-template pTemplate="end">
+            <p-button *ngIf="!(authService.isLoggedIn$ | async)" label="Login" icon="pi pi-sign-in"
+                styleClass="p-button-text" routerLink="/login"></p-button>
+            <p-button *ngIf="authService.isLoggedIn$ | async" label="Logout" icon="pi pi-sign-out"
+                styleClass="p-button-danger p-button-text" (click)="logout()"></p-button>
+        </ng-template>
     </p-menubar>
-</div>  
+</div>
