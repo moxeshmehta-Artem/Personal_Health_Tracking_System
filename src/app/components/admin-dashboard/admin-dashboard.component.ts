@@ -49,4 +49,11 @@ export class AdminDashboardComponent implements OnInit {
       this.dietitianForm.reset();
     }
   }
+
+  deleteDietitian(email: string) {
+    if (confirm('Are you sure you want to remove this dietitian?')) {
+      this.authService.removeUser(email);
+      this.loadDietitians();
+    }
+  }
 }

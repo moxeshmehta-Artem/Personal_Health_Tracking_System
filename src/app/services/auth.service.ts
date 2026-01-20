@@ -37,20 +37,7 @@ export class AuthService {
             users.push(admin);
         }
 
-        // Seed Dietitian if not exists
-        const dietitianExists = users.some((u: any) => u.email === 'dietitian@health.com');
-        if (!dietitianExists) {
-            const dietitian = {
-                firstname: 'Dr.',
-                lastname: 'Dietitian',
-                email: 'dietitian@health.com',
-                password: 'Diet123!',
-                role: 'dietitian'
-            };
-            users.push(dietitian);
-        }
-
-        if (!adminExists || !dietitianExists) {
+        if (!adminExists) {
             localStorage.setItem(this.USERS_KEY, JSON.stringify(users));
         }
 
@@ -119,9 +106,47 @@ export class AuthService {
         const userIndex = users.findIndex((u: any) => u.email === email);
         if (userIndex !== -1) {
             users[userIndex].notes = notes;
-            users[userIndex].assignedDietitian = 'Dr. Dietitian'; // Simplified assignment
+            // Removed hardcoded assignment so it keeps the real assigned doctor
             localStorage.setItem(this.USERS_KEY, JSON.stringify(users));
         }
+    }
+
+    removeUser(email: string): void {
+        const users = this.getUsers();
+        const filteredUsers = users.filter((u: any) => u.email !== email);
+        localStorage.setItem(this.USERS_KEY, JSON.stringify(filteredUsers));
+    }
+
+    assignDietitian(patientEmail: string, dietitianEmail: string): void {
+        const users = this.getUsers();
+        const userIndex = users.findIndex((u: any) => u.email === patientEmail);
+        if (userIndex !== -1) {
+            users[userIndex].assignedDietitian = dietitianEmail;
+            localStorage.setItem(this.USERS_KEY, JSON.stringify(users));
+        }
+    }
+
+    updateConsultationStatus(patientEmail: string, status: 'active' | 'inactive'): void {
+        const users = this.getUsers();
+        const userIndex = users.findIndex((u: any) => u.email === patientEmail);
+        if (userIndex !== -1) {
+            users[userIndex].consultationStatus = status;
+            localStorage.setItem(this.USERS_KEY, JSON.stringify(users));
+        }
+    }
+
+    getMyPatients(dietitianEmail: string): any[] {
+        const users = this.getUsers();
+        return users.filter((u: any) => u.role === 'patient' && u.assignedDietitian === dietitianEmail);
+    }
+
+    // Helper to get current user email from token
+    getCurrentUserEmail(): string | null {
+        const token = this.getToken();
+        if (!token) return null;
+        try {
+            return JSON.parse(atob(token.split('.')[1])).email;
+        } catch (e) { return null; }
     }
 
     getToken(): string | null {

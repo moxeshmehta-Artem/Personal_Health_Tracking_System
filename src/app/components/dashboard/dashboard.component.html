@@ -1,13 +1,12 @@
 <div class="card">
   <h2>Dietitian Dashboard</h2>
-  <p>Welcome, Doctor. Here are your patients.</p>
+  <p>Here are your assigned patients.</p>
 
   <p-table [value]="patients" [tableStyle]="{ 'min-width': '50rem' }">
     <ng-template pTemplate="header">
       <tr>
         <th>Patient Name</th>
-        <th>Age</th>
-        <th>Email</th>
+        <th>Status</th>
         <th>Doctor's Notes</th>
         <th>Action</th>
       </tr>
@@ -15,14 +14,23 @@
     <ng-template pTemplate="body" let-patient>
       <tr>
         <td>{{ patient.firstname }} {{ patient.lastname }}</td>
-        <td>{{ patient.age }}</td>
-        <td>{{ patient.email }}</td>
+        <td>
+          <span
+            [class]="'text-sm font-bold ' + (patient.consultationStatus === 'active' ? 'text-green-500' : 'text-orange-500')">
+            {{ patient.consultationStatus === 'active' ? 'ACTIVE' : 'INACTIVE' }}
+          </span>
+        </td>
         <td>
           <span *ngIf="patient.notes" class="text-green-600 font-bold">Has Script</span>
           <span *ngIf="!patient.notes" class="text-gray-500">None</span>
         </td>
-        <td>
-          <p-button label="Consult/Note" icon="pi pi-file-edit" (click)="openNoteDialog(patient)"></p-button>
+        <td class="flex gap-2">
+          <p-button [label]="patient.consultationStatus === 'active' ? 'End Consult' : 'Start Consult'"
+            [styleClass]="patient.consultationStatus === 'active' ? 'p-button-warning p-button-sm' : 'p-button-success p-button-sm'"
+            (click)="toggleConsultation(patient)">
+          </p-button>
+          <p-button label="Script" icon="pi pi-file-edit" styleClass="p-button-sm"
+            [disabled]="patient.consultationStatus !== 'active'" (click)="openNoteDialog(patient)"></p-button>
         </td>
       </tr>
     </ng-template>

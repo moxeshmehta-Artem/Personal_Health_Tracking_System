@@ -28,10 +28,23 @@ export class DashboardComponent implements OnInit {
   }
 
   loadPatients() {
-    this.patients = this.authService.getPatients();
+    const dietitianEmail = this.authService.getCurrentUserEmail();
+    if (dietitianEmail) {
+      this.patients = this.authService.getMyPatients(dietitianEmail);
+    }
+  }
+
+  toggleConsultation(patient: any) {
+    const newStatus = patient.consultationStatus === 'active' ? 'inactive' : 'active';
+    this.authService.updateConsultationStatus(patient.email, newStatus);
+    this.loadPatients();
   }
 
   openNoteDialog(patient: any) {
+    if (patient.consultationStatus !== 'active') {
+      alert('You must start the consultation to edit notes.');
+      return;
+    }
     this.selectedPatient = patient;
     this.noteContent = patient.notes || '';
     this.displayNoteDialog = true;

@@ -7,6 +7,7 @@ export interface User {
     gender: string;
     phone: string[];
     role?: 'admin' | 'dietitian' | 'patient';
-    assignedDietitian?: string; // Email or ID of the assigned dietitian
+    assignedDietitian?: string; // Email of the assigned dietitian
     notes?: string; // Notes from the dietitian
+    consultationStatus?: 'active' | 'inactive';
 }
