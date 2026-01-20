@@ -21,32 +21,61 @@ export class NavbarComponent implements OnInit {
 
   ngOnInit() {
     this.authService.isLoggedIn$.subscribe(isLoggedIn => {
-      this.items = [
-        {
-          label: 'Dashboard',
-          icon: 'pi pi-home',
-          routerLink: '/dashboard',
-          visible: isLoggedIn
-        },
-        {
-          label: 'Add Health',
-          icon: 'pi pi-plus',
-          routerLink: '/add-health',
-          visible: isLoggedIn
-        },
-        {
-          label: 'History',
-          icon: 'pi pi-history',
-          routerLink: '/history',
-          visible: isLoggedIn
-        },
-        {
-          label: 'Tips',
-          icon: 'pi pi-info-circle',
-          routerLink: '/tips',
-          visible: isLoggedIn
-        }
-      ];
+      const role = this.authService.getUserRole();
+
+      if (role === 'admin') {
+        this.items = [
+          {
+            label: 'Manage Dietitians',
+            icon: 'pi pi-users',
+            routerLink: '/admin-dashboard',
+            visible: isLoggedIn
+          }
+        ];
+      } else if (role === 'dietitian') {
+        this.items = [
+          {
+            label: 'Dashboard',
+            icon: 'pi pi-home',
+            routerLink: '/dashboard',
+            visible: isLoggedIn
+          },
+          {
+            label: 'Add Health',
+            icon: 'pi pi-plus',
+            routerLink: '/add-health',
+            visible: isLoggedIn
+          },
+          {
+            label: 'History',
+            icon: 'pi pi-history',
+            routerLink: '/history',
+            visible: isLoggedIn
+          },
+          {
+            label: 'Tips',
+            icon: 'pi pi-info-circle',
+            routerLink: '/tips',
+            visible: isLoggedIn
+          }
+        ];
+      } else {
+        // Patient Menu
+        this.items = [
+          {
+            label: 'Dashboard',
+            icon: 'pi pi-home',
+            routerLink: '/patient-dashboard',
+            visible: isLoggedIn
+          },
+          {
+            label: 'Tips',
+            icon: 'pi pi-info-circle',
+            routerLink: '/tips',
+            visible: isLoggedIn
+          }
+        ];
+      }
     });
   }
 

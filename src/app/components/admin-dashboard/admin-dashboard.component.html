@@ -1,0 +1,45 @@
+<div class="card">
+    <div class="flex justify-content-between align-items-center mb-4">
+        <h2>Admin Dashboard: Manage Dietitians</h2>
+        <p-button label="Add New Dietitian" icon="pi pi-plus" (click)="showDialog()"></p-button>
+    </div>
+
+    <p-table [value]="dietitians" [tableStyle]="{ 'min-width': '50rem' }">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-dietitian>
+            <tr>
+                <td>{{ dietitian.firstname }} {{ dietitian.lastname }}</td>
+                <td>{{ dietitian.email }}</td>
+                <td>{{ dietitian.role | titlecase }}</td>
+            </tr>
+        </ng-template>
+    </p-table>
+
+    <p-dialog header="Add New Dietitian" [(visible)]="displayDialog" [style]="{width: '30vw'}" [modal]="true">
+        <form [formGroup]="dietitianForm" (ngSubmit)="onSubmit()" class="flex flex-column gap-3">
+            <div class="field">
+                <label for="firstname" class="block">First Name</label>
+                <input id="firstname" type="text" pInputText formControlName="firstname" class="w-full" />
+            </div>
+            <div class="field">
+                <label for="lastname" class="block">Last Name</label>
+                <input id="lastname" type="text" pInputText formControlName="lastname" class="w-full" />
+            </div>
+            <div class="field">
+                <label for="email" class="block">Email</label>
+                <input id="email" type="email" pInputText formControlName="email" class="w-full" />
+            </div>
+            <div class="field">
+                <label for="password" class="block">Password</label>
+                <input id="password" type="password" pInputText formControlName="password" class="w-full" />
+            </div>
+            <p-button label="Save" type="submit" [disabled]="dietitianForm.invalid"></p-button>
+        </form>
+    </p-dialog>
+</div>

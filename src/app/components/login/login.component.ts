@@ -42,7 +42,14 @@ export class LoginComponent {
       const success = this.authService.login(email, password);
 
       if (success) {
-        this.router.navigate(['/dashboard']); // Navigate to Dashboard
+        const role = this.authService.getUserRole();
+        if (role === 'admin') {
+          this.router.navigate(['/admin-dashboard']);
+        } else if (role === 'dietitian') {
+          this.router.navigate(['/dashboard']);
+        } else {
+          this.router.navigate(['/patient-dashboard']);
+        }
       } else {
         this.errorMessage = 'Invalid email or password';
       }

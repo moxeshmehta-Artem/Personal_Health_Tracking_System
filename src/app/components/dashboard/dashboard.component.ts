@@ -1,32 +1,49 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HealthService } from '../../services/health.service';
-import { Health } from '../../models/health.model';
+import { FormsModule } from '@angular/forms';
+import { AuthService } from '../../services/auth.service';
 import { CardModule } from 'primeng/card';
+import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
-import { RouterLink } from '@angular/router';
+import { DialogModule } from 'primeng/dialog';
+import { InputTextareaModule } from 'primeng/inputtextarea';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, CardModule, ButtonModule, RouterLink],
+  imports: [CommonModule, FormsModule, CardModule, TableModule, ButtonModule, DialogModule, InputTextareaModule],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })
 export class DashboardComponent implements OnInit {
-  private healthService = inject(HealthService);
-  latestRecord: Health | null = null;
-  totalRecords = 0;
+  patients: any[] = [];
+  displayNoteDialog: boolean = false;
+  selectedPatient: any = null;
+  noteContent: string = '';
+
+  constructor(private authService: AuthService) { }
 
   ngOnInit() {
-    this.healthService.healthRecords$.subscribe(records => {
-      this.totalRecords = records.length;
-      if (records.length > 0) {
-        // Assuming the last record in the array is the latest one added
-        this.latestRecord = records[records.length - 1];
-      } else {
-        this.latestRecord = null;
-      }
-    });
+    this.loadPatients();
+  }
+
+  loadPatients() {
+    this.patients = this.authService.getPatients();
+  }
+
+  openNoteDialog(patient: any) {
+    this.selectedPatient = patient;
+    this.noteContent = patient.notes || '';
+    this.displayNoteDialog = true;
+  }
+
+  saveNote() {
+    if (this.selectedPatient) {
+      this.authService.updatePatientNotes(this.selectedPatient.email, this.noteContent);
+      this.loadPatients(); // Reload to see updates
+      this.displayNoteDialog = false;
+      this.selectedPatient = null;
+      this.noteContent = '';
+    }
   }
 }
