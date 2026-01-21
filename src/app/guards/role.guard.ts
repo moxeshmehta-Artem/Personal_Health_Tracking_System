@@ -20,6 +20,8 @@ export const roleGuard: CanActivateFn = (route: ActivatedRouteSnapshot, state) =
             router.navigate(['/admin-dashboard']);
         } else if (userRole === 'dietitian') {
             router.navigate(['/dashboard']);
+        } else if (userRole === 'frontdesk') {
+            router.navigate(['/frontdesk-dashboard']);
         } else {
             router.navigate(['/patient-dashboard']);
         }

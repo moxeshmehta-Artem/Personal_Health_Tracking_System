@@ -10,6 +10,7 @@
                 <th>Name</th>
                 <th>Email</th>
                 <th>Role</th>
+                <th>Status</th>
                 <th>Action</th>
             </tr>
         </ng-template>
@@ -18,6 +19,12 @@
                 <td>{{ dietitian.firstname }} {{ dietitian.lastname }}</td>
                 <td>{{ dietitian.email }}</td>
                 <td>{{ dietitian.role | titlecase }}</td>
+                <td>
+                    <span
+                        [class]="'text-sm font-bold ' + (dietitian.isAvailable === false ? 'text-red-500' : 'text-green-500')">
+                        {{ dietitian.isAvailable === false ? 'UNAVAILABLE' : 'AVAILABLE' }}
+                    </span>
+                </td>
                 <td>
                     <p-button icon="pi pi-trash" styleClass="p-button-danger p-button-sm"
                         (click)="deleteDietitian(dietitian.email)"></p-button>

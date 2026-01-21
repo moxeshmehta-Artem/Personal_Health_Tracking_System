@@ -7,6 +7,7 @@ import { PatientRegComponent } from './components/patient-reg/patient-reg.compon
 import { PatientDashboardComponent } from './components/patient-dashboard/patient-dashboard.component';
 import { AdminDashboardComponent } from './components/admin-dashboard/admin-dashboard.component';
 import { LoginComponent } from './components/login/login.component';
+import { FrontdeskDashboardComponent } from './components/frontdesk-dashboard/frontdesk-dashboard.component';
 import { authGuard } from './guards/auth.guard';
 import { roleGuard } from './guards/role.guard';
 
@@ -14,12 +15,19 @@ export const routes: Routes = [
     { path: '', redirectTo: 'login', pathMatch: 'full' },
     { path: 'login', component: LoginComponent },
 
-    // Admin Routes (Super User)
     {
         path: 'admin-dashboard',
         component: AdminDashboardComponent,
         canActivate: [authGuard, roleGuard],
         data: { role: 'admin' }
+    },
+
+    // Frontdesk Routes
+    {
+        path: 'frontdesk-dashboard',
+        component: FrontdeskDashboardComponent,
+        canActivate: [authGuard, roleGuard],
+        data: { role: 'frontdesk' }
     },
 
     // Dietitian Routes (Formerly "Admin", now Doctor)

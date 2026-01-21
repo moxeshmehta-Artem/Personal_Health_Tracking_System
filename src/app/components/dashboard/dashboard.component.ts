@@ -7,11 +7,14 @@ import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextareaModule } from 'primeng/inputtextarea';
+import { CalendarModule } from 'primeng/calendar';
+import { InputTextModule } from 'primeng/inputtext';
+import { ToggleButtonModule } from 'primeng/togglebutton';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, FormsModule, CardModule, TableModule, ButtonModule, DialogModule, InputTextareaModule],
+  imports: [CommonModule, FormsModule, CardModule, TableModule, ButtonModule, DialogModule, InputTextareaModule, CalendarModule, InputTextModule, ToggleButtonModule],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })
@@ -20,6 +23,11 @@ export class DashboardComponent implements OnInit {
   displayNoteDialog: boolean = false;
   selectedPatient: any = null;
   noteContent: string = '';
+
+  displayAvailabilityDialog: boolean = false;
+  availabilitySlots: any[] = [];
+  newSlot: any = { date: '', startTime: '', endTime: '' };
+  isAvailable: boolean = true; // Default to available
 
   constructor(private authService: AuthService) { }
 
@@ -31,6 +39,56 @@ export class DashboardComponent implements OnInit {
     const dietitianEmail = this.authService.getCurrentUserEmail();
     if (dietitianEmail) {
       this.patients = this.authService.getMyPatients(dietitianEmail);
+      this.loadAvailability(dietitianEmail);
+      this.loadStatus(dietitianEmail);
+    }
+  }
+
+  loadStatus(email: string) {
+    const users = this.authService.getUsers();
+    const user = users.find((u: any) => u.email === email);
+    if (user && user.isAvailable !== undefined) {
+      this.isAvailable = user.isAvailable;
+    }
+  }
+
+  toggleStatus() {
+    this.isAvailable = !this.isAvailable;
+    const email = this.authService.getCurrentUserEmail();
+    if (email) {
+      this.authService.updateDoctorStatus(email, this.isAvailable);
+    }
+  }
+
+  loadAvailability(email: string) {
+    const users = this.authService.getUsers();
+    const user = users.find((u: any) => u.email === email);
+    if (user && user.availability) {
+      this.availabilitySlots = user.availability;
+    }
+  }
+
+  openAvailabilityDialog() {
+    this.displayAvailabilityDialog = true;
+  }
+
+  addSlot() {
+    if (this.newSlot.date && this.newSlot.startTime && this.newSlot.endTime) {
+      this.availabilitySlots.push({ ...this.newSlot, id: Date.now().toString() });
+      this.saveAvailability();
+      this.newSlot = { date: '', startTime: '', endTime: '' };
+    }
+  }
+
+  removeSlot(index: number) {
+    this.availabilitySlots.splice(index, 1);
+    this.saveAvailability();
+  }
+
+  saveAvailability() {
+    const email = this.authService.getCurrentUserEmail();
+    if (email) {
+      this.authService.updateAvailability(email, this.availabilitySlots);
     }
   }
 

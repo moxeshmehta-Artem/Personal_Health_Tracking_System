@@ -10,6 +10,21 @@
             <span class="font-bold text-green-700">Consultation Active</span>
         </div>
 
+        <div *ngIf="doctorAvailability.length > 0" class="mb-3">
+            <div class="text-900 font-medium text-lg mb-2">Doctor's Availability</div>
+            <ul class="list-none p-0 m-0">
+                <li *ngFor="let slot of doctorAvailability"
+                    class="flex align-items-center py-2 border-bottom-1 surface-border">
+                    <i class="pi pi-calendar mr-2 text-primary"></i>
+                    <span class="font-medium mr-2">{{ slot.date }}:</span>
+                    <span>{{ slot.startTime }} - {{ slot.endTime }}</span>
+                </li>
+            </ul>
+        </div>
+        <div *ngIf="doctorAvailability.length === 0" class="mb-3 text-600 font-italic">
+            <i class="pi pi-info-circle mr-1"></i> No availability slots posted.
+        </div>
+
         <hr class="mb-3 mx-0 border-top-1 border-none surface-border" />
         <div class="text-900 font-medium text-xl mb-2">Doctor's Script / Notes</div>
         <div class="text-600 line-height-3" style="white-space: pre-wrap;">{{ currentUser?.notes || 'No notes yet.' }}

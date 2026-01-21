@@ -47,6 +47,8 @@ export class LoginComponent {
           this.router.navigate(['/admin-dashboard']);
         } else if (role === 'dietitian') {
           this.router.navigate(['/dashboard']);
+        } else if (role === 'frontdesk') {
+          this.router.navigate(['/frontdesk-dashboard']);
         } else {
           this.router.navigate(['/patient-dashboard']);
         }

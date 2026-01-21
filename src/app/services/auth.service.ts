@@ -37,7 +37,33 @@ export class AuthService {
             users.push(admin);
         }
 
-        if (!adminExists) {
+        // Seed Frontdesk if not exists
+        const frontdeskExists = users.some((u: any) => u.email === 'frontdesk@health.com');
+        if (!frontdeskExists) {
+            const frontdesk = {
+                firstname: 'Front',
+                lastname: 'Desk',
+                email: 'frontdesk@health.com',
+                password: 'Frontdesk123!',
+                role: 'frontdesk'
+            };
+            users.push(frontdesk);
+        }
+
+        // Seed Dietitian if not exists
+        const dietitianExists = users.some((u: any) => u.email === 'dietitian@health.com');
+        if (!dietitianExists) {
+            const dietitian = {
+                firstname: 'Sarah',
+                lastname: 'Dietitian',
+                email: 'dietitian@health.com',
+                password: 'Dietitian123!',
+                role: 'dietitian'
+            };
+            users.push(dietitian);
+        }
+
+        if (!adminExists || !frontdeskExists || !dietitianExists) {
             localStorage.setItem(this.USERS_KEY, JSON.stringify(users));
         }
 
@@ -131,6 +157,24 @@ export class AuthService {
         const userIndex = users.findIndex((u: any) => u.email === patientEmail);
         if (userIndex !== -1) {
             users[userIndex].consultationStatus = status;
+            localStorage.setItem(this.USERS_KEY, JSON.stringify(users));
+        }
+    }
+
+    updateAvailability(dietitianEmail: string, availability: any[]): void {
+        const users = this.getUsers();
+        const userIndex = users.findIndex((u: any) => u.email === dietitianEmail);
+        if (userIndex !== -1) {
+            users[userIndex].availability = availability;
+            localStorage.setItem(this.USERS_KEY, JSON.stringify(users));
+        }
+    }
+
+    updateDoctorStatus(dietitianEmail: string, isAvailable: boolean): void {
+        const users = this.getUsers();
+        const userIndex = users.findIndex((u: any) => u.email === dietitianEmail);
+        if (userIndex !== -1) {
+            users[userIndex].isAvailable = isAvailable;
             localStorage.setItem(this.USERS_KEY, JSON.stringify(users));
         }
     }

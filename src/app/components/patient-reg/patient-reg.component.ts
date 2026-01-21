@@ -47,6 +47,7 @@ export class PatientRegComponent {
         Validators.pattern('^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*]).+$')
       ]],
       confirmPassword: ['', Validators.required],
+      time: ['', Validators.required],
     },
       { validators: (form: any) => this.passwordMatchValidator(form) });
   }
@@ -73,7 +74,16 @@ export class PatientRegComponent {
     if (this.patientform.valid) {
       console.log(this.patientform.value);
       this.authService.register(this.patientform.value);
-      this.router.navigate(['/login']);
+
+      const currentUserRole = this.authService.getUserRole();
+      if (currentUserRole === 'frontdesk') {
+        alert('Patient registered successfully!');
+        this.patientform.reset();
+        // Ideally we shouldn't reset the whole form if we want to keep some defaults, but for now this is fine.
+        // We might want to clear validators or specific fields, but reset() is the quick way.
+      } else {
+        this.router.navigate(['/login']);
+      }
     } else {
       this.patientform.markAllAsTouched();
     }

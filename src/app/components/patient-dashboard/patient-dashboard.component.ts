@@ -22,17 +22,33 @@ export class PatientDashboardComponent implements OnInit {
 
   ngOnInit() {
     this.refreshUser();
-    this.availableDietitians = this.authService.getDietitians().map((d: any) => ({
-      label: `Dr. ${d.firstname} ${d.lastname}`,
-      value: d.email
-    }));
+    this.availableDietitians = this.authService.getDietitians()
+      .filter((d: any) => d.isAvailable !== false) // Treat undefined as true (default available)
+      .map((d: any) => ({
+        label: `Dr. ${d.firstname} ${d.lastname}`,
+        value: d.email
+      }));
   }
+
+  doctorAvailability: any[] = [];
 
   refreshUser() {
     const email = this.getEmailFromToken();
     if (email) {
       const users = (this.authService as any).getUsers();
       this.currentUser = users.find((u: any) => u.email === email);
+
+      if (this.currentUser?.assignedDietitian) {
+        this.loadDoctorAvailability(this.currentUser.assignedDietitian);
+      }
+    }
+  }
+
+  loadDoctorAvailability(dietitianEmail: string) {
+    const users = (this.authService as any).getUsers();
+    const dietitian = users.find((u: any) => u.email === dietitianEmail);
+    if (dietitian && dietitian.availability) {
+      this.doctorAvailability = dietitian.availability;
     }
   }
 
